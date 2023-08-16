@@ -62,9 +62,10 @@ public class RPNCalculator {
      * @return A String reference containing hello message.
      */
     public static String getHello() {
-        return "RPN Calculator\n" +
-                "\n" +
-                "(blank line to quit)";
+        return """
+                RPN Calculator
+
+                (blank line to quit)""";
     }
 
     /**
