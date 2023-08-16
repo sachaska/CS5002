@@ -41,40 +41,57 @@ public class Stack {
     }
 
     /**
-     *
-     * @param element
+     * The push method pushs element into Stack.
+     * @param element The double value to push.
      */
     public void push(double element) {
+
         if (full())
             throw new StackOverFlowException("Stack is full!");
+
         s.add(element);
         top++;
     }
 
     /**
-     *
-     * @return
+     * The pop method pops element off the Stack.
+     * @return The double value being pop.
      */
     public double pop() {
+
         if (empty())
             throw new EmptyStackException("Stack is empty!");
         else
             return s.remove(top--);
+
     }
 
+    /**
+     * The peek method peeks element from the Stack.
+     * @return The double value being peek.
+     */
     public double peek() {
+
         if (empty())
             throw new EmptyStackException("Stack is empty!");
         else
             return s.get(top);
+
     }
 }
+
+/**
+ * The EmptyStackException.
+ */
 class EmptyStackException extends RuntimeException {
     public EmptyStackException(String message) {
         super(message);
     }
 }
 
+/**
+ * The StackOverFlowException.
+ */
 class StackOverFlowException extends RuntimeException {
     public StackOverFlowException(String message) {
         super(message);
