@@ -45,7 +45,7 @@ public class Canvas extends JPanel {
     private void drawWord(Graphics g) {
         System.out.println(this.word.toString());
         RenderStack stack = new RenderStack();
-        RenderQueue word = this.word.copy();
+        RenderQueue word = this.word.copy();    
         RenderPoint pen = this.pen.copy();
         while (!word.empty()) {
             //System.out.println(pen);
