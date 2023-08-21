@@ -48,7 +48,7 @@ public class RenderStack {
     
     /**
      * Pushes an item onto the top of this stack.
-     * @param x the item to be pushed onto this stack
+     * @param point the item to be pushed onto this stack
      */
     public void push(RenderPoint point) {
         head = new Node(point.copy(), head);

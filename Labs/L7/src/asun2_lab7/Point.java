@@ -157,7 +157,6 @@ public class Point {
     /**
      * Convenience method will take in other point as (x,y) and 
      * then calculate distance,
-     * @see distance(other)
      * @param otherx x coord of point to get distance to
      * @param othery y coord of point to get distance to
      * @return distance to other

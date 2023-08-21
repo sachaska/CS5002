@@ -41,11 +41,11 @@ public class Lab7 {
         canvas.setWord(getKochSnowflake(4), 5, 60, 200, 200, 60);
         application.repaint();
         Thread.sleep(1000);
-        
+
         canvas.setWord(getPlant1(7), 2, 25, 300, 550, -90);
         application.repaint();
         Thread.sleep(1000);
-        
+
         canvas.setWord(getFassCurve(4), 8, 60, 500, 150, -120);
         application.repaint();
         Thread.sleep(1000);
