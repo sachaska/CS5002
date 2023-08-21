@@ -1,6 +1,6 @@
 package asun2_lab8;
 
-/** The Queue class
+/** The Generic Queue class
  * includes a constructor, enqueue, dequeue, peek, empty, toString,
  * copy, append and equals.
  */
@@ -12,7 +12,6 @@ public class Queue<T> {
 
     /**
      * The Node class is used to implement the doubly linked list.
-     * @author Mike McKee
      */
     private class Node<T> {
         /**

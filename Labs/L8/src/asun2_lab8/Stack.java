@@ -1,7 +1,7 @@
 package asun2_lab8;
 
 /**
- * This is a String stack class and includes: a constructor,
+ * This is a generic stack class and includes: a constructor,
  * push, pop, peek, and empty methods.
  *
  * @author Ai Sun
