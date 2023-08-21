@@ -95,7 +95,7 @@ public class Stack<T> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Node<T> i = head; i != null; i = i.next) {
-            sb.append(i.data.toString());
+            sb.append(i.data.toString()).append("\n");
         }
         return sb.toString();
     }
