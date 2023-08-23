@@ -8,9 +8,10 @@ public class GameModel {
     private Stack discard;          // Stack of discard pile
     private Queue[] playerQueue;    // Player card queue list
     private ArrayList<Integer> cardDeck; // Card deck
-    private int playerCount;        // Player count
-    private final int PAIR = 4;
-    private final int CARD = 13;
+    private int playerCount, gameRound, discardCard; // Player count, game round
+    private StringBuilder builder;  // StringBuilder for output
+    private final int PAIR = 4, CARD = 13;
+    private final String NO_WINNER = "";
 
     /**
      * Constructor, initializes playerCount and cardDeck.
@@ -21,15 +22,80 @@ public class GameModel {
         setCardDeck();
     }
 
-    public String test() {
-        initGame();
-        return showPlayerQueue(0);
+    public void gameProcess() {
+        String winnerName;
+        if (initGame()) {
+           do {
+               winnerName = playerRound(playerQueue[gameRound % 2]);
+            } while (winnerName.equals(NO_WINNER));
+           builder.append("You have won the game!\n")
+                   .append("\n")
+                   .append("The game has finished.\n");
+        } else {
+            throw new RuntimeException("GAME PROCESS ERROR.");
+        }
     }
 
+    public String toString() {
+        return builder.toString();
+    }
+
+    private String playerRound(Queue playerQueue) {
+        int playerCard;         // player card number
+
+        // Update game round.
+        gameRound++;
+
+        // Update player name.
+        String playerName = gameRound % 2 == 1 ? "Player1" : "Player2";
+        builder.append(String.format("\n%s's turn, cards:\n", playerName));
+
+        // Show player card queue.
+        showPlayerQueue(playerQueue);
+
+        // Put one card from Deck in the first round.
+        if (gameRound == 1) {
+            discardCard = shuffledDeck.pop();
+            discard.push(discardCard);
+        }
+        else
+            discardCard = discard.peek();
+        // Pick player card in the queue and discard.
+        playerCard = playerQueue.dequeue();
+        builder.append(String.format("Discard pile card: %d\n", discardCard));
+        builder.append(String.format("Your current card: %d\n", playerCard));
+
+        if (playerQueue.isEmpty())
+            return playerName;
+
+        else {
+            comparison(discardCard, playerCard, playerQueue);
+            System.out.println(discard.peek() + " " + playerCard);
+            discard.push(playerCard);
+            return NO_WINNER;
+        }
+    }
+
+    private void comparison(int discardCard, int playerCard, Queue player) {
+        if (discardCard > playerCard) {
+            for (int i = 0; i < 2; i++)
+                player.enqueue(shuffledDeck.pop());
+            builder.append("Your card is LOWER, pick up 2 cards.\n");
+        }
+        else if (discardCard == playerCard) {
+            player.enqueue(shuffledDeck.pop());
+            builder.append("Your card is EQUAL, pick up 1 card.\n");
+        }
+        else
+            builder.append("Your card is HIGHER, turn is over.\n");
+    }
 
     private boolean initGame() {
         final boolean SUCCESS = true;   // A flag of method.
-
+        // Initialize game round.
+        gameRound = 0;
+        // Initialize StringBuilder.
+        builder = new StringBuilder();
         // Shuffle cards.
         shuffleDeck(cardDeck);
         initShuffledDeck();
@@ -57,13 +123,13 @@ public class GameModel {
             shuffledDeck.push(element);
     }
 
-    private String showPlayerQueue(int player) {
-        StringBuilder builder = new StringBuilder();
+    private String showPlayerQueue(Queue player) {
         builder.append("|");
-        for (Node current = playerQueue[player].front;
+        for (Node current = player.front;
              current != null; current = current.next) {
             builder.append(String.format("%3d |", current.value));
         }
+        builder.append("\n");
         return builder.toString();
     }
 
@@ -215,9 +281,16 @@ public class GameModel {
             if (isEmpty())
                 throw new EmptyStackException("Pop error, stack empty.");
 
-            int element = top.value;
-            top = top.next;
-            top.prev = null;
+            int element = peek();
+
+            if (top.next == null)
+                top = null;
+
+            else {
+                top = top.next;
+                top.prev = null;
+            }
+
             elementCount--;
             return element;
         }
@@ -226,8 +299,7 @@ public class GameModel {
             if (isEmpty())
                 throw new EmptyStackException("Peek error, stack empty.");
 
-            int element = top.value;
-            return element;
+            return top.value;
         }
 
         public String toString() {
@@ -257,5 +329,4 @@ public class GameModel {
             super(message);
         }
     }
-
 }
