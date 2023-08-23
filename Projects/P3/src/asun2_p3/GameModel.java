@@ -80,8 +80,10 @@ public class GameModel {
 
     private void comparison(int discardCard, int playerCard, Queue player) {
         if (discardCard > playerCard) {
+
             for (int i = 0; i < playerCount; i++)
                 player.enqueue(safePop());
+
             builder.append("Your card is LOWER, pick up 2 cards.\n");
         }
         else if (discardCard == playerCard) {
@@ -121,6 +123,7 @@ public class GameModel {
     private void initPlayerQueue() {
         final int COUNTS = 7;
         createQueueList(playerCount);
+
         for (int i = 0; i < COUNTS; i++) {
             for (Queue player: playerQueue)
                 player.enqueue(shuffledDeck.pop());
@@ -129,16 +132,19 @@ public class GameModel {
 
     private void initShuffledDeck() {
         shuffledDeck = new Stack();
+
         for (int element : cardDeck)
             shuffledDeck.push(element);
     }
 
     private String showPlayerQueue(Queue player) {
         builder.append("|");
+
         for (Node current = player.front;
              current != null; current = current.next) {
             builder.append(String.format("%3d |", current.value));
         }
+
         builder.append("\n");
         return builder.toString();
     }
@@ -149,6 +155,7 @@ public class GameModel {
      */
     private void createQueueList(int playerCount) {
         playerQueue = new Queue[playerCount];
+
         for (int i = 0; i < playerCount; i++)
             playerQueue[i] = new Queue();
     }
@@ -158,10 +165,13 @@ public class GameModel {
      */
     private void setCardDeck() {
         cardDeck = new ArrayList<>();
+
         for (int pair = 0; pair < PAIR; pair++) {
+
             for (int card = 1; card <= CARD; card++) {
                 cardDeck.add(card);
             }
+
         }
     }
 
@@ -173,6 +183,7 @@ public class GameModel {
      */
     private void shuffleDeck(ArrayList<Integer> cards) {
         Random rand = new Random();
+
         for (int i = cards.size(); i > 1; i--) {
             int j = rand.nextInt(i);
             int temp = cards.get(i - 1);
@@ -314,10 +325,12 @@ public class GameModel {
 
         public String toString() {
             StringBuilder stringBuilder = new StringBuilder();
+
             for (Node current = top; current != null;
             current = current.next) {
                 stringBuilder.append(String.format("%3d" , current.value));
             }
+
             return stringBuilder.toString();
         }
     }
