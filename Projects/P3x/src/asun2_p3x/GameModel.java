@@ -60,6 +60,12 @@ public class GameModel {
             }
         } while (winnerName.equals(NO_WINNER));
 
+        /*
+        If there is no card in the discard Stack,
+        (except current discard card),
+        cannot turn over,
+        force game to tie.
+         */
         if (winnerName == "TIE")
             builder.append("There is no card in the Deck. GAME TIE!\n");
         else builder.append("You have won the game!\n");
