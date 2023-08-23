@@ -10,7 +10,7 @@ public class GameModel {
     private ArrayList<Integer> cardDeck; // Card deck
     private int playerCount, gameRound, discardCard; // Player count, game round
     private StringBuilder builder;  // StringBuilder for output
-    private final int PAIR = 4, CARD = 13;
+    private final int PAIR = 4, CARD = 13, FIRST = 1;
     private final String NO_WINNER = "";
 
     /**
@@ -24,16 +24,15 @@ public class GameModel {
 
     public void gameProcess() {
         String winnerName;
-        if (initGame()) {
-           do {
-               winnerName = playerRound(playerQueue[gameRound % 2]);
-            } while (winnerName.equals(NO_WINNER));
-           builder.append("You have won the game!\n")
-                   .append("\n")
-                   .append("The game has finished.\n");
-        } else {
-            throw new RuntimeException("GAME PROCESS ERROR.");
-        }
+        initGame();
+
+        do {
+            winnerName = playerRound(playerQueue[gameRound % playerCount]);
+        } while (winnerName.equals(NO_WINNER));
+
+        builder.append("You have won the game!\n")
+                .append("\n")
+                .append("The game has finished.\n");
     }
 
     public String toString() {
@@ -47,30 +46,33 @@ public class GameModel {
         gameRound++;
 
         // Update player name.
-        String playerName = gameRound % 2 == 1 ? "Player1" : "Player2";
+        String playerName =
+                gameRound % playerCount == FIRST ? "Player1" : "Player2";
         builder.append(String.format("\n%s's turn, cards:\n", playerName));
 
         // Show player card queue.
         showPlayerQueue(playerQueue);
 
         // Put one card from Deck in the first round.
-        if (gameRound == 1) {
+        if (gameRound == FIRST) {
             discardCard = shuffledDeck.pop();
             discard.push(discardCard);
         }
         else
             discardCard = discard.peek();
+
         // Pick player card in the queue and discard.
         playerCard = playerQueue.dequeue();
         builder.append(String.format("Discard pile card: %d\n", discardCard));
         builder.append(String.format("Your current card: %d\n", playerCard));
 
+        // Player run out of cards, win the game.
         if (playerQueue.isEmpty())
             return playerName;
 
+        // Otherwise, game continue, compare the cards.
         else {
             comparison(discardCard, playerCard, playerQueue);
-            System.out.println(discard.peek() + " " + playerCard);
             discard.push(playerCard);
             return NO_WINNER;
         }
@@ -78,20 +80,19 @@ public class GameModel {
 
     private void comparison(int discardCard, int playerCard, Queue player) {
         if (discardCard > playerCard) {
-            for (int i = 0; i < 2; i++)
-                player.enqueue(shuffledDeck.pop());
+            for (int i = 0; i < playerCount; i++)
+                player.enqueue(safePop());
             builder.append("Your card is LOWER, pick up 2 cards.\n");
         }
         else if (discardCard == playerCard) {
-            player.enqueue(shuffledDeck.pop());
+            player.enqueue(safePop());
             builder.append("Your card is EQUAL, pick up 1 card.\n");
         }
         else
             builder.append("Your card is HIGHER, turn is over.\n");
     }
 
-    private boolean initGame() {
-        final boolean SUCCESS = true;   // A flag of method.
+    private void initGame() {
         // Initialize game round.
         gameRound = 0;
         // Initialize StringBuilder.
@@ -103,10 +104,19 @@ public class GameModel {
         initPlayerQueue();
         // Initialize discardDeck.
         discard = new Stack();
-
-        return SUCCESS;
     }
 
+    private int safePop() {
+
+        if (shuffledDeck.isEmpty()) {
+            // Turn over the deck.
+            shuffledDeck = discard;
+            discard = new Stack();
+            discard.push(shuffledDeck.pop());
+        }
+
+        return shuffledDeck.pop();
+    }
 
     private void initPlayerQueue() {
         final int COUNTS = 7;
