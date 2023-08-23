@@ -47,7 +47,7 @@ public class SillyCardGames {
     /**
      * The getPlayerCount get player count from user input.
      * @param keyboard The Scanner Object to capture user input.
-     * @return A integer value represents user command.
+     * @return An integer value represents user command.
      */
     public static int getPlayerCount(Scanner keyboard) {
         final int DEFAULT = 0;      // default value
@@ -61,7 +61,7 @@ public class SillyCardGames {
                 input = DEFAULT;
             }
         } while (input > 6 || input < 2);
-
+        keyboard.nextLine();
         return input;
     }
 

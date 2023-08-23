@@ -53,13 +53,19 @@ public class GameModel {
 
         // Repeat game process until have winner.
         do {
-            winnerName = playerRound(playerQueue[currPlayer % playerCount]);
+            try {
+                winnerName = playerRound(playerQueue[currPlayer % playerCount]);
+            } catch (EmptyStackException e) {
+                winnerName = "TIE";
+            }
         } while (winnerName.equals(NO_WINNER));
 
+        if (winnerName == "TIE")
+            builder.append("There is no card in the Deck. GAME TIE!\n");
+        else builder.append("You have won the game!\n");
+
         // Append game finish message.
-        builder.append("You have won the game!\n")
-                .append("\n")
-                .append("The game has finished.\n");
+        builder.append("\n").append("The game has finished.\n");
     }
 
     /**
