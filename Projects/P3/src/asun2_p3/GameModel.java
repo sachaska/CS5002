@@ -175,9 +175,13 @@ public class GameModel {
 
         if (shuffledDeck.isEmpty()) {
             // Turn over the deck.
-            shuffledDeck = discard;
-            discard = new Stack();
-            discard.push(shuffledDeck.pop());
+            shuffledDeck = new Stack();
+            discard.pop();
+
+            while (!discard.isEmpty())
+                shuffledDeck.push(discard.pop());
+
+            discard.push(discardCard);
         }
 
         return shuffledDeck.pop();
